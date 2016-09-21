@@ -59,11 +59,14 @@ switch ($select) {
                         <option>Electronics</option>
                         <option>Pharmacy</option>
                     </select>
-                    <select required id="year" class="w3-select w3-border w3-border-blue w3-third w3-margin-right w3-margin-bottom">
+                    <select required id="semester" class="w3-select w3-border w3-border-blue w3-third w3-margin-right w3-margin-bottom">
                         <option value="all" selected>All Years</option>
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
                     </select>
                     <button onclick="search()" class="w3-btn w3-border w3-round w3-teal w3-margin-bottom"><b><i class="fa fa-search"></i> Search</b></button>
                 </div>
@@ -72,44 +75,34 @@ switch ($select) {
                 </div>
             </div>
 
-            <div id="bstatus" class="w3-container bstatus all w3-margin-top">
-                <form class="w3-container w3-card-12 w3-padding" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-                    <h2 class="w3-text-black w3-center"><strong>New Book Entry</strong></h2>
-                    <p>      
-                        <b class="w3-text-teal w3-large"><strong><i class="fa fa-user"></i> Book Name :</strong></b>
-                        <input class="w3-input w3-border w3-border-blue" name="bookname" type="text" placeholder="Book Name"></p>
-                    <p>      
-                        <label class="w3-text-teal w3-large"><b><strong><i class="fa fa-user"></i> Book Author :</strong></b></label>
-                        <input class="w3-input w3-border w3-border-blue" name="bookauthor" type="text" placeholder="Book Author"></p>
-                    <p>      
-                        <label class="w3-text-teal w3-large"><b><strong><i class="fa fa-user"></i> Cupboard/Rack :</strong></b></label>
-                        <input class="w3-input w3-border w3-border-blue" name="keepingplace" type="text" placeholder="Cupboard/Rack"></p>
-                    <div id="bookiddiv">      
-                        <label class="w3-text-teal w3-large"><b><strong><i class="fa fa-user"></i> Book Id :</strong></b></label>
-                        <input class="w3-input w3-border w3-border-blue" name="bookid[]" type="text" placeholder="Book Id">
-                    </div>
-                    <div class="w3-row w3-margin-top">
-                        <label class="w3-text-teal w3-large w3-quarter" style="display: inline-block;"><b><strong><i class="fa fa-user"></i> Quantity :</strong></b></label>
-                        <input id="quantity" disabled class="w3-input w3-border w3-border-blue w3-quarter w3-margin-right w3-right-align" name="quantity" type="text" placeholder="Quantity" value="1" style="display: inline-block;">
-                        <button class="w3-btn w3-border w3-round w3-teal" onclick="quantityedit('+');
-                                return false;" type="button"><i class="fa fa-plus w3-large"></i></button>
-                        <button class="w3-btn w3-border w3-round w3-teal" onclick="quantityedit('-');
-                                return false;" type="button"><i class="fa fa-minus w3-large"></i></button>
-                    </div>
-                    <p>
-                        <span class="w3-text-red"><b>&nbsp;&nbsp;&nbsp;<?php
-                                $sign = "<i class=\"fa fa-warning\"></i> ";
-                                if ($aerr == 1) {
-                                    echo $sign . $aerr1;
-                                }
-                                if ($aerr == 2) {
-                                    echo $sign . $aerr2;
-                                }
-                                ?></b>
-                        </span>
-                        <button id="asubmit" type="submit" name="bstatus" class="w3-btn w3-border w3-round w3-teal w3-right"><b><i class="fa fa-plus"></i> Add Book</b></button>
-                    </p>
-                </form>
+            <div id="bstatus" class="w3-container bstatus all w3-margin-top w3-card-12 w3-padding">
+                <h2 class="w3-text-black w3-center"><strong>New Book Entry</strong></h2>
+                <input class="w3-input w3-border w3-border-blue w3-third w3-margin-right w3-margin-bottom" id="keyword" type="text" placeholder="Enter Search Keyword" />
+                <div class="w3-rest">
+                    <select required id="branch" class="w3-select w3-border w3-border-blue w3-third w3-margin-right w3-margin-bottom">
+                        <option value="all" selected>All Branches</option>
+                        <option>Civil</option>
+                        <option>Mechanical Production</option>
+                        <option>Mechanical Automobile</option>
+                        <option>Computer Science</option>
+                        <option>Information Technology</option>
+                        <option>Electronics</option>
+                        <option>Pharmacy</option>
+                    </select>
+                    <select required id="semester" class="w3-select w3-border w3-border-blue w3-third w3-margin-right w3-margin-bottom">
+                        <option value="all" selected>All Years</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                    </select>
+                    <button onclick="booksearch()" class="w3-btn w3-border w3-round w3-teal w3-margin-bottom"><b><i class="fa fa-search"></i> Search</b></button>
+                </div>
+                <div id = "bsearchresult">
+
+                </div>
             </div>
         </div>
         <script type="text/javascript">
@@ -138,7 +131,7 @@ switch ($select) {
             function search() {
                 var key = document.getElementById("keyword").value;
                 var branch = document.getElementById("branch").value;
-                var year = document.getElementById("year").value;
+                var sem = document.getElementById("semester").value;
                 var div = document.getElementById("ssearchresult");
                 div.innerHTML = '<p class = "w3-text-teal w3-center"><i class= "fa fa-spinner fa-pulse fa-5x"></i><br><strong class="w3-margin-top">Loading...</strong></p>';
                 var req = new XMLHttpRequest();
@@ -149,7 +142,7 @@ switch ($select) {
                 };
                 req.open("POST", "studentsearch.php", true);
                 req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                req.send("key="+key+"&branch="+branch+"&year="+year);
+                req.send("key=" + key + "&branch=" + branch + "&sem=" + sem);
             }
         </script>
     </body>

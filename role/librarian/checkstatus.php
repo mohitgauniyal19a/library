@@ -76,27 +76,13 @@ switch ($select) {
             </div>
 
             <div id="bstatus" class="w3-container bstatus all w3-margin-top w3-card-12 w3-padding">
-                <h2 class="w3-text-black w3-center"><strong>New Book Entry</strong></h2>
-                <input class="w3-input w3-border w3-border-blue w3-third w3-margin-right w3-margin-bottom" id="keyword" type="text" placeholder="Enter Search Keyword" />
+                <h2 class="w3-text-black w3-center"><strong>Search Books</strong></h2>
+                <input class="w3-input w3-border w3-border-blue w3-third w3-margin-right w3-margin-bottom" id="bookkeyword" type="text" placeholder="Enter Search Keyword" />
                 <div class="w3-rest">
-                    <select required id="branch" class="w3-select w3-border w3-border-blue w3-third w3-margin-right w3-margin-bottom">
-                        <option value="all" selected>All Branches</option>
-                        <option>Civil</option>
-                        <option>Mechanical Production</option>
-                        <option>Mechanical Automobile</option>
-                        <option>Computer Science</option>
-                        <option>Information Technology</option>
-                        <option>Electronics</option>
-                        <option>Pharmacy</option>
-                    </select>
-                    <select required id="semester" class="w3-select w3-border w3-border-blue w3-third w3-margin-right w3-margin-bottom">
-                        <option value="all" selected>All Years</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
+                    <select required id="type" class="w3-select w3-border w3-border-blue w3-third w3-margin-right w3-margin-bottom">
+                        <option value="name">Book Name</option>
+                        <option value="author">Author</option>
+                        <option value="bid">Book ID</option>
                     </select>
                     <button onclick="booksearch()" class="w3-btn w3-border w3-round w3-teal w3-margin-bottom"><b><i class="fa fa-search"></i> Search</b></button>
                 </div>
@@ -143,6 +129,21 @@ switch ($select) {
                 req.open("POST", "studentsearch.php", true);
                 req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 req.send("key=" + key + "&branch=" + branch + "&sem=" + sem);
+            }
+            function booksearch() {
+                var key = document.getElementById("bookkeyword").value;
+                var type = document.getElementById("type").value;
+                var div = document.getElementById("bsearchresult");
+                div.innerHTML = '<p class = "w3-text-teal w3-center"><i class= "fa fa-spinner fa-pulse fa-5x"></i><br><strong class="w3-margin-top">Loading...</strong></p>';
+                var req = new XMLHttpRequest();
+                req.onreadystatechange = function () {
+                    if (req.readyState == 4 && req.status == 200) {
+                        div.innerHTML = req.responseText;
+                    }
+                };
+                req.open("POST", "booksearch.php", true);
+                req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                req.send("key=" + key + "&type=" + type);
             }
         </script>
     </body>

@@ -2,9 +2,9 @@
 require_once 'includes/db.inc.php';
 require_once 'includes/secure.inc.php';
 
-$key = $_GET['key'];
-$branch = $_GET['branch'];
-$sem = $_GET['sem'];
+$key = $_POST['key'];
+$branch = $_POST['branch'];
+$sem = $_POST['sem'];
 
 if (is_numeric($key)) {
     if ($branch == 'all' && $year == 'all') {
